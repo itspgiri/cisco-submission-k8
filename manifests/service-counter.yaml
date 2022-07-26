@@ -1,0 +1,54 @@
+# docker pull ghcr.io/adyanth/docker-k8s-final-assessment:counter-latest
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-counter
+  labels:
+    component: counter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: counter
+  template:
+    metadata:
+      labels:
+        component: counter
+    spec:
+      containers:
+      - name: counter
+        image: ghcr.io/adyanth/docker-k8s-final-assessment:counter-latest
+        # volumeMounts:
+        # - name: vol
+        #   mountPath: /data
+        ports:
+        - containerPort: 8080
+        env:
+        - name: FILENAME 
+          value: dump.txt
+        - name: IDENTITY
+          valueFrom:
+            secretKeyRef:
+              name: service-secrets
+              key: IDENTITY
+        - name: SERVE_PATH  
+          value: count
+        - name: PART_OF
+          valueFrom:
+            configMapKeyRef:
+              name: part-of
+              key: part-of
+
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-service
+spec:
+  selector:
+    component: counter
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

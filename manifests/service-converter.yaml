@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-converter
+  labels:
+    component: converter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: converter
+  template:
+    metadata:
+      labels:
+        component: converter
+    spec:
+      containers:
+      - name: converter
+        image: ghcr.io/adyanth/docker-k8s-final-assessment:converter-latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SERVE_PATH 
+          value: convert
+        - name: PART_OF
+          valueFrom:
+            configMapKeyRef:
+              name: part-of
+              key: part-of
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: converter-service
+spec:
+  selector:
+    component: converter
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
