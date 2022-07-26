@@ -68,6 +68,8 @@ We'll  initially first build the image from our docker file.
 Creating a writeable container layer over the  image
 
     docker run -it -d -p 3000:3000 express-app
+ 
+ We can now access the application at localhost:3000
 ## Run Manifests
 
 Using minikube, the Docker driver allows us to install Kubernetes into an existing Docker.
@@ -76,6 +78,7 @@ Using minikube, the Docker driver allows us to install Kubernetes into an existi
 
 We'll use kubectl to create pods.
 
+    cd manifests
     kubectl apply -f config.yaml
     kubectl apply -f secrets.yaml
     kubectl apply -f service-converter.yaml
