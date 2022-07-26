@@ -5,12 +5,14 @@ metadata:
   labels:
     component: converter
 spec:
+  # c. Replica set to 2
   replicas: 2
   selector:
     matchLabels:
       component: converter
   template:
     metadata:
+    # Deployment and service for service-converter with label selector component="converter"
       labels:
         component: converter
     spec:
@@ -19,9 +21,13 @@ spec:
         image: ghcr.io/adyanth/docker-k8s-final-assessment:converter-latest
         ports:
         - containerPort: 8080
+        # a. With the env for the pod
         env:
+        # i. SERVE_PATH set to "convert"
         - name: SERVE_PATH 
           value: convert
+        # ii. PART_OF set to "CWiCS"
+        # b. PART_OF should be mounted from a ConfigMap
         - name: PART_OF
           valueFrom:
             configMapKeyRef:
@@ -39,3 +45,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
+      nodePort: 30100

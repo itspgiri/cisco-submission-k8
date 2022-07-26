@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+# b. PART_OF should be mounted from a ConfigMap
   name: part-of
 data:
   part-of: CWiCS

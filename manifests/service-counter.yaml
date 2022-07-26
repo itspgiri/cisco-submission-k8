@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: service-counter
+  # Deployment and service for service-counter with persistent volume (claim 1GB) at /data with label selector component="counter"
   labels:
     component: counter
 spec:
@@ -23,16 +24,23 @@ spec:
         #   mountPath: /data
         ports:
         - containerPort: 8080
+        # a. With the env for the pod
         env:
+        # i. FILENAME set to "dump.txt"
         - name: FILENAME 
           value: dump.txt
+        # ii. IDENTITY set to <your-github-username>
+        # c. IDENTITY should be set using Secrets (Secrets should not be committed to a repo directly, but for this assignment, please do)
         - name: IDENTITY
           valueFrom:
             secretKeyRef:
               name: service-secrets
               key: IDENTITY
+        # iii. SERVE_PATH set to "count"
         - name: SERVE_PATH  
           value: count
+        # PART_OF set to "CWiCS"
+        # b. PART_OF should be mounted from a ConfigMap
         - name: PART_OF
           valueFrom:
             configMapKeyRef:
@@ -52,3 +60,4 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
+      nodePort: 30101
