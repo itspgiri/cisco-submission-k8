@@ -1,9 +1,9 @@
-const express = require("express");
-const http = require("http");
+const express = require('express')
+const http = require('http')
 
-const app = express();
+const app = express()
 
-app.use(express.json());
+app.use(express.json())
 
 // Serves a path / that responds to
 // a. GET
@@ -18,16 +18,16 @@ app.use(express.json());
 // c. POST body of anything else (invalid JSON)
 //     i. Any non 2xx error code (4xx/5xx)
 
-const serviceCounter = 'localhost';
-const serviceConverter = 'localhost';
+const serviceCounter = 'localhost'
+const serviceConverter = 'localhost'
 
-app.get("/", (req, res) => {
-    res.status(200).send("CWiCS Assessment");
+app.get('/', (req, res) => {
+    res.status(200).send('CWiCS Assessment')
 })
-app.get("/cc", (req, res) => {
-    res.status(200).send("POST to this endpoint with JSON to convert to YAML");
+app.get('/cc', (req, res) => {
+    res.status(200).send('POST to this endpoint with JSON to convert to YAML')
 })
-app.post("/cc", (req, res) => { 
+app.post('/cc', (req, res) => {
     const json = req.body
 
     var options = {
@@ -35,15 +35,15 @@ app.post("/cc", (req, res) => {
         path: '/count',
         port: '8081',
         method: 'POST',
-        body: {}
-    };
+        body: {},
+    }
     var options2 = {
         host: serviceConverter,
         path: '/convert',
         port: '8080',
         method: 'POST',
-        body: json
-    };
+        body: json,
+    }
 
     try {
         var postReq = http.request(options, (response) => {
@@ -51,15 +51,13 @@ app.post("/cc", (req, res) => {
         })
 
         var postReq2 = http.request(options2, (response) => {
-            res.status(200).send(response.body);
+            res.status(200).send(response.body)
         })
-
     } catch (error) {
         res.send(error)
     }
-
 })
 
 app.listen(process.env.PORT || 3000, function () {
-	console.log("Server started on port 3000");
-});
+    console.log('Server started on port 3000')
+})
