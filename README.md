@@ -77,7 +77,7 @@ Using minikube, the Docker driver allows us to install Kubernetes into an existi
 We'll use kubectl to create pods.
 
     kubectl apply -f config.yaml
-    kubectl apply -f secret.yaml
+    kubectl apply -f secrets.yaml
     kubectl apply -f service-converter.yaml
     kubectl apply -f service-container.yaml
 
